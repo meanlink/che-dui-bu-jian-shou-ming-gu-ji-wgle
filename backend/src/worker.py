@@ -41,6 +41,11 @@ def main():
         for j in db.scalars(select(Job).where(Job.status=='running')):
             j.status='queued';record(db,'worker','job.recovered',{'id':j.id})
         db.commit()
+    # Spot-check rosters, occupancy and received progress are durable; realign
+    # the cross-batch reservation guard after a crash.
+    with Session() as db:
+        from src.services.spotchecks import restore_reservations
+        restore_reservations(db)
     while True:
         Path('/tmp/heartbeat').touch()
         try:

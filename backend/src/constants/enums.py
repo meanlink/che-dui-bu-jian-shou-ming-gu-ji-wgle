@@ -8,3 +8,7 @@ class JobStatus(str, Enum):
     running = 'running'
     completed = 'completed'
     failed = 'failed'
+class SpotCheckStatus(str, Enum):
+    open = 'open'
+    closed = 'closed'
+    cancelled = 'cancelled'
